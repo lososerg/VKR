@@ -13,9 +13,28 @@ EXECUTE.
 FREQUENCIES VARIABLES=Q39reverseCoding
   /ORDER=ANALYSIS.
 
-/* Checking how well are they connected*/
+/* Checking how well are they connected Spearman and Kendall correlation coefficients*/
 
 NONPAR CORR
   /VARIABLES=Q23 Q39reverseCoding
   /PRINT=BOTH TWOTAIL NOSIG
   /MISSING=PAIRWISE.
+
+/* Saving standardized values of index vars*/
+
+DATASET ACTIVATE DataSet1.
+DESCRIPTIVES VARIABLES=Q39reverseCoding Q23
+  /SAVE
+  /STATISTICS=MEAN STDDEV MIN MAX.
+
+/* Meassuring correlation between standardized variables*/
+CORRELATIONS
+  /VARIABLES=ZQ39reverseCoding ZQ23
+  /PRINT=TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+NONPAR CORR
+  /VARIABLES=ZQ39reverseCoding ZQ23
+  /PRINT=BOTH TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+
+/* Same results achieved as with instandardized data */
