@@ -38,3 +38,28 @@ NONPAR CORR
   /MISSING=PAIRWISE.
 
 /* Same results achieved as with instandardized data */
+
+/* Getting var distribution by couintry*/
+SORT CASES  BY CNTRY.
+SPLIT FILE LAYERED BY CNTRY.
+
+FREQUENCIES VARIABLES=Q39reverseCoding Q23
+  /ORDER=ANALYSIS.
+
+/* Making Q23 less diverse*/
+RECODE Q23 (0=1) (1=1) (2=1) (3=2) (4=2) (5=3) (6=3) (7=4) (8=4) (9=5) (10=5) (SYSMIS=SYSMIS) INTO 
+    Q23_5scale.
+VARIABLE LABELS  Q23_5scale 'В некоторых странах полиция и другие официальные органы согласны '+
+    'идти навстречу тем, кто нарушает правила, и люди могут '.
+EXECUTE.
+
+/* Computing corr coef with reduced scalse of Q23 */
+
+CORRELATIONS
+  /VARIABLES=Q23_5scale Q39reverseCoding
+  /PRINT=TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+NONPAR CORR
+  /VARIABLES=Q23_5scale Q39reverseCoding
+  /PRINT=BOTH TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
